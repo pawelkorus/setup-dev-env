@@ -4,6 +4,7 @@ var path = require('path');
 var express = require('express');
 var proxy = require('proxy-middleware');
 var wordpressInstaller = require('wordpress-installer');
+var spawn = require('child_process').spawn;
 
 var paths = {
   wordpress: path.join(__dirname, 'wordpress')
@@ -32,12 +33,23 @@ gulp.task('ensure-wordpress', function() {
 	wordpressInstaller(options.wordpress).ensure();
 });
 
-gulp.task('build', []);
+gulp.task('vagrant-up', function(cb) {
+	spawn('vagrant', ['up']).on('exit', function(code) {
+		if(code == 0) {
+			console.log('Vagrant instance is up.');
+			cb();
+		} else {
+			cb('Can\'t bring vagrant instance up.');
+		}
+	});
+});
 
-gulp.task('develop', ['ensure-wordpress'], function(cb) {
+gulp.task('proxy-php', ['vagrant-up'], function(cb) {
 	var app = express();
-
 	app.use(proxy(url.parse('http://127.0.0.1:17999')));
-
 	app.listen(10000);
 })
+
+gulp.task('build', []);
+
+gulp.task('develop', ['ensure-wordpress', 'proxy-php']);
