@@ -41,3 +41,5 @@ wordpress
 
 # Vagrant files
 .vagrant
+
+.idea
