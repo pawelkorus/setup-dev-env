@@ -1,7 +1,7 @@
 module.exports = exports = {
-	init: function(options) { return init.bind(null, options); }
+	init: function(options) { return wrap.bind(null, options, init); }
 	,up: function(options) { return wrap.bind(null, options, up); }
-	,suspend: function(options) { return suspend.bind(null, options); }
+	,suspend: function(options) { return wrap.bind(null, options, suspend); }
 	,destroy: function(options) { return wrap.bind(null, options, destroy); }
 }
 
@@ -16,14 +16,20 @@ function wrap(options, func) {
 	});
 }
 
-function init(options, cb) {
+function init(options, resolve, reject) {
 	options = options || {};
 	if(!options.env) throw new Error("Vagrant environment not selected.");
-	return fs.createReadStream(path.join(__dirname, options.env, 'Vagrantfile')).pipe(fs.createWriteStream('Vagrantfile'));
+	var reader = fs.createReadStream(path.join(__dirname, options.env, 'Vagrantfile'));
+	var writer = fs.createWriteStream('Vagrantfile');
+	reader.pipe(writer);
+	writer.on('finish', resolve);
+	writer.on('error', reject);
 }
 
 function up(options, resolve, reject) {
-	spawn('vagrant', ['up']).on('exit', function(code) {
+	var process = spawn('vagrant', ['up']);
+
+	process.on('exit', function(code) {
 		if(code == 0) {
 			console.log('Vagrant instance is up.');
 			resolve();
@@ -31,23 +37,25 @@ function up(options, resolve, reject) {
 			reject('Can\'t bring vagrant instance up.');
 		}
 	});
+
+	process.stdout.on('data', function(data) {
+		console.log(data.toString());
+	});
 }
 
-function suspend(options, cb) {
-	return new Promise(function(resolve, reject) {
-		spawn('vagrant', ['suspend']).on('exit', function(code) {
-			if(code == 0) {
-				console.log('Vagrant instance is suspended.');
-				resolve();
-			} else {
-				reject('Can\'t suspend vagrant instance.');
-			}
-		});
+function suspend(options, resolve, reject) {
+	spawn('vagrant', ['suspend']).on('exit', function(code) {
+		if(code == 0) {
+			console.log('Vagrant instance is suspended.');
+			resolve();
+		} else {
+			reject('Can\'t suspend vagrant instance.');
+		}
 	});
 }
 
 function destroy(options, resolve, reject) {
-	spawn('vagrant', ['destroy']).on('exit', function(code) {
+	spawn('vagrant', ['destroy', '-f']).on('exit', function(code) {
 		if(code == 0) {
 			console.log('Vagrant instance has been destroyed.');
 			resolve();

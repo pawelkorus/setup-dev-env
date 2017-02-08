@@ -1,4 +1,4 @@
 module.exports = exports = {
-	vagrant: require('./vagrant-tasks')
-	,proxy: require('./proxy-tasks')
+	vagrant: require('./vagrant')
+	,proxy: require('./proxy')
 }
