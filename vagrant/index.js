@@ -1,14 +1,14 @@
+var spawn = require('child_process').spawn;
+var fs = require('fs');
+var path = require('path');
+var promise = require('promise');
+
 module.exports = exports = {
 	init: function(options) { return wrap.bind(null, options, init); }
 	,up: function(options) { return wrap.bind(null, options, up); }
 	,suspend: function(options) { return wrap.bind(null, options, suspend); }
 	,destroy: function(options) { return wrap.bind(null, options, destroy); }
 }
-
-var spawn = require('child_process').spawn;
-var fs = require('fs');
-var path = require('path');
-var promise = require('promise');
 
 function wrap(options, func) {
 	return new Promise(function(resolve, reject) {
