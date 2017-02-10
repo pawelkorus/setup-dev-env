@@ -1,9 +1,10 @@
 var vagrant = require('../vagrant');
 
-module.exports = exports = function(gulp) {
-  gulp.task('env:init', wrap.bind(null, {env: 'wordpress-env'}, init));
-  gulp.task('env:up', vagrant.up());
-  gulp.task('env:down', vagrant.suspend());
+module.exports = exports = function(gulp, env) {
+  gulp.task('env:init', wrap.bind(null, {env: env}, init));
+  gulp.task('vagrant:up', vagrant.up());
+  gulp.task('vagrant:suspend', vagrant.suspend());
+  gulp.task('vagrant:destroy', vagrant.destroy());
 }
 Object.assign(exports, {
   init: function(options) { return wrap.bind(null, options, init); }
