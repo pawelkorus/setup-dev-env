@@ -1,4 +1,7 @@
 var vagrant = require('../vagrant');
+var Promise = require('promise');
+var fs = require('fs');
+var path = require('path');
 
 module.exports = exports = function(gulp, env) {
   gulp.task('env:init', wrap.bind(null, {env: env}, init));
