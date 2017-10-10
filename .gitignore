@@ -40,3 +40,10 @@ jspm_packages
 .vagrant
 
 .idea
+
+# directory where database files are stored
+.db_data
+# directory where wordpress uploads are stored
+.uploads
+# directory where theme is stored
+build
