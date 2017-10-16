@@ -47,3 +47,5 @@ jspm_packages
 .uploads
 # directory where theme is stored
 build
+
+.wordpress
