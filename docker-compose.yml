@@ -1,34 +1,33 @@
 version: '3.2'
 
 services:
-   db:
-     image: mysql:5.7
-     volumes:
-       - type: bind
-         source: .db_data
-         target: /var/lib/mysql
-     restart: always
-     environment:
-       MYSQL_ROOT_PASSWORD: somewordpress
-       MYSQL_DATABASE: wordpress
-       MYSQL_USER: wordpress
-       MYSQL_PASSWORD: wordpress
+  db:
+    image: mysql:5.7
+    volumes:
+      - db:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
 
-   wordpress:
-     depends_on:
-       - db
-     image: wordpress:latest
-     ports:
-       - "8000:80"
-     restart: always
-     volumes:
-       - type: bind
-         source: ./build
-         target: /var/www/html/wp-content/themes/theme
-       - type: bind
-         source: ./.uploads
-         target: /var/www/html/wp-content/uploads
-     environment:
-       WORDPRESS_DB_HOST: db:3306
-       WORDPRESS_DB_USER: wordpress
-       WORDPRESS_DB_PASSWORD: wordpress
+  phpstandalone:
+    depends_on:
+      - db
+    build: https://github.com/pawelkorus/docker-php-builtin-server.git
+    ports:
+      - "8000:8000"
+    restart: always
+    volumes:
+      - wordpress:/root-dir
+    environment:
+      LOCAL_USER_ID: "1000"
+
+  wp-cli:
+    build: https://github.com/pawelkorus/docker-wp-cli.git
+    volumes:
+      - wordpress:/root-dir
+    environment:
+      LOCAL_USER_ID: "1000"
+
+volumes:
+  db:
+  wordpress:
