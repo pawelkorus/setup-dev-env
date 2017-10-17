@@ -1,9 +1,0 @@
-{
-  "name": "setup-dev-env",
-  "version": "0.0.1",
-  "description": "Setups different types of development environment.",
-  "dependencies": {},
-  "devDependencies": {
-    "promise": "^7.1.1"
-  }
-}
