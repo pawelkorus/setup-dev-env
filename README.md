@@ -1,5 +1,12 @@
 # wordpress-dev-server
 
+## Prerequisites
+
+local-persist volume driver is required in order to create volumes that are mounted in local filesystem. You can easily enable this plugin by running docker container: 
+```
+docker run -d -v /run/docker/plugins/:/run/docker/plugins/ cwspear/docker-local-persist-volume-plugin
+```
+
 ## Working with docker-compose
 
 To start docker compose bundle in detached mode run:
