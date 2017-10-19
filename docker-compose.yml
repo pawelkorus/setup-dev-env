@@ -30,4 +30,8 @@ services:
 
 volumes:
   db:
+    driver: local
   wordpress:
+    driver: local-persist
+    driver_opts:
+      mountpoint: $PWD/.wordpress
