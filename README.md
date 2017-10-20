@@ -6,6 +6,7 @@ local-persist volume driver is required in order to create volumes that are moun
 ```
 docker run -d -v /run/docker/plugins/:/run/docker/plugins/ cwspear/docker-local-persist-volume-plugin
 ```
+When using local-persist plugin as docker image remember that you have to create directories set up in volumes before you can use them. This is because local-persist will try to create these directories but in the context of container not host machine.
 
 ## Working with docker-compose
 
