@@ -8,7 +8,7 @@ docker run -d -v /run/docker/plugins/:/run/docker/plugins/ cwspear/docker-local-
 ```
 When using local-persist plugin as docker image remember that you have to create directories set up in volumes before you can use them. This is because local-persist will try to create these directories but in the context of container not host machine.
 
-## Working with docker-compose
+## Using docker-compose
 
 To start docker compose bundle in detached mode run:
 ```
@@ -29,7 +29,7 @@ You can also specify service name:
 docker-compose rm -fv <name>
 ```
 
-## Installing Wordpress
+## Managing Wordpress
 Compose file defines wp-cli service which is used to control various aspects of wordpress. In order to run wp-cli commands use ```docker-compose run``` with ```--rm``` option set, so that container is removed just after wp-cli comand completes.
 
 For wp-cli commands and options refer to the [wp-cli documentation](https://developer.wordpress.org/cli/commands/).
@@ -49,4 +49,8 @@ docker-compose run --rm wp-cli config create --dbname=wordpress --dbuser=root --
 If target database is not created yet, then issue following:
 ```
 docker-compose run --rm wp-cli db create
+```
+In order to install plugin:
+```
+docker-compose run --rm wp-cli plugin install <name_of_the_plugin>
 ```
